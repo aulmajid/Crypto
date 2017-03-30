@@ -5,12 +5,13 @@ def string_to_array(text, length):
     return texts
 
 
-def string_to_binary(text):
+def string_to_binary(text, length=8):
     binary = ''
     for c in text:
         binary += (format(ord(c), 'b').zfill(8))
-    for i in range(8 - len(text)):
-        binary += '00000000'
+    for i in range(length - len(text)):
+        for j in range(length):
+            binary += '0'
     return binary
 
 

@@ -42,6 +42,13 @@ def generate_key_binary(key):
     utils.debug('key binary', key_binary, 7)
     return key_binary
 
+def generate_iv_binary(iv):
+    iv_binary = utils.string_to_binary(iv)
+    utils.debugLine()
+    utils.debug('iv', iv)
+    utils.debug('iv binary', iv_binary, 7)
+    return iv_binary
+
 
 def generate_cd(key_binary):
     cd0 = permute(key_binary, tables.PC1)
@@ -137,15 +144,19 @@ def start():
     key = '12345678'
     key_binary = generate_key_binary(key)
 
+    # initialization vector
+    iv = '12345678'
+    iv_binary = generate_iv_binary(iv)
+
     # C, D, K
     c, d = generate_cd(key_binary)
     k = generate_k(c, d)
 
     # blocks loop
-    cipher_splitted = []
+    cipher_splitted = [iv_binary]
     for i in range(len(plain_binary_splitted)):
         # des
-        cipher_temp = des(k, plain_binary_splitted[i])
+        cipher_temp = utils.xor(plain_binary_splitted[i], des(k, cipher_splitted[i]))
         cipher_splitted.append(cipher_temp)
 
     # cipher
@@ -153,5 +164,5 @@ def start():
     with open('output.txt', 'wb') as f:
         f.write(cipher)
 
-utils.enableDebug=False
+utils.enableDebug = False
 start()

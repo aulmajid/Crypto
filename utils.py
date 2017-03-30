@@ -1,3 +1,5 @@
+enableDebug = True
+
 def string_to_array(text, length):
     texts = []
     for i in range(0, len(text), length):
@@ -50,8 +52,16 @@ def xor(binary1, binary2):
 
 
 def debug(tag, content, length=None):
+    if not enableDebug:
+        return
     content = str(content)
     if length is None:
         print tag + ' : ' + content
     else:
         print tag + ' : ' + split_string(content, length)
+
+def debugLine():
+    if not enableDebug:
+        return
+    print ''
+

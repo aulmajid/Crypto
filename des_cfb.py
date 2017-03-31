@@ -23,7 +23,7 @@ def sbox(binary):
     return b
 
 
-def generate_plain_binary_splitted(plain):
+def convert_plain_to_binary_splitted(plain):
     plain_splitted = utils.string_to_array(plain, 8)
     plain_binary_splitted = []
     for p in plain_splitted:
@@ -35,19 +35,12 @@ def generate_plain_binary_splitted(plain):
     return plain_binary_splitted
 
 
-def generate_key_binary(key):
+def convert_key_to_binary(key):
     key_binary = utils.string_to_binary(key)
     utils.debugLine()
     utils.debug('key', key)
     utils.debug('key binary', key_binary, 7)
     return key_binary
-
-def generate_iv_binary(iv):
-    iv_binary = utils.string_to_binary(iv)
-    utils.debugLine()
-    utils.debug('iv', iv)
-    utils.debug('iv binary', iv_binary, 7)
-    return iv_binary
 
 
 def generate_cd(key_binary):
@@ -83,27 +76,22 @@ def generate_lr0(plain_temp_binary_splitted):
     return l, r
 
 
-def generate_cipher_temp(l16, r16):
-    cipher_temp_binary = permute(r16 + l16, tables.IP_INV)
-    cipher_temp_binary_splitted = utils.string_to_array(cipher_temp_binary, 8)
+def convert_cipher_temp_to_hex(cipher_binary_temp):
+    cipher_binary_temp_splitted = utils.string_to_array(cipher_binary_temp, 8)
     cipher_temp = ''
-    for c in cipher_temp_binary_splitted:
+    for c in cipher_binary_temp_splitted:
         cipher_temp += utils.binary_to_hex(c)
     utils.debugLine()
-    utils.debug('cipher temp binary', cipher_temp_binary, 8)
+    utils.debug('cipher temp binary', cipher_binary_temp, 8)
     utils.debug('cipher temp', cipher_temp)
     return cipher_temp
 
-
-def generate_cipher(cipher_splitted):
-    cipher = ''
-    for c in cipher_splitted:
-        cipher += c
+def convert_iv_to_binary(iv):
+    iv_binary = utils.string_to_binary(iv)
     utils.debugLine()
-    utils.debug('chiper splitted', cipher_splitted)
-    utils.debug('cipher', cipher)
-    return cipher
-
+    utils.debug('iv', iv)
+    utils.debug('iv binary', iv_binary, 7)
+    return iv_binary
 
 def des(k, binary):
     # L0, R0
@@ -129,40 +117,62 @@ def des(k, binary):
         utils.debug('R' + str(j + 1), r[j + 1], 8)
         utils.debug('L' + str(j + 1), l[j + 1], 8)
 
-    # cipher temp
-    cipher_temp = generate_cipher_temp(l[16], r[16])
-    return cipher_temp
+    return permute(r[16] + l[16], tables.IP_INV)
 
 
 def start():
-    # plain text
-    with open('input.txt', 'rb') as f:
-        plain = f.read()
-    plain_binary_splitted = generate_plain_binary_splitted(plain)
+
+    # plain
+    mode = raw_input('Mode (Encrypt / Decrypt) : ').lower()
+    plain = raw_input('Enter input : ')
+    if mode == 'decrypt':
+        plain = plain.decode('hex')
+    utils.forceDebug('plain',plain)
+    plain_binary_splitted = convert_plain_to_binary_splitted(plain)
+    block = len(plain_binary_splitted)
 
     # key
-    key = '12345678'
-    key_binary = generate_key_binary(key)
+    key = 'ASDFGHJK'
+    key_binary = convert_key_to_binary(key)
 
-    # initialization vector
-    iv = '12345678'
-    iv_binary = generate_iv_binary(iv)
+    # init vector
+    iv = 'QWERTYUI'
+    iv_binary = convert_iv_to_binary(iv)
 
     # C, D, K
     c, d = generate_cd(key_binary)
     k = generate_k(c, d)
 
     # blocks loop
-    cipher_splitted = [iv_binary]
-    for i in range(len(plain_binary_splitted)):
+    plain_binary_splitted = [iv_binary] + plain_binary_splitted
+    cipher_binary_splitted = [iv_binary]
+    for i in range(block):
         # des
-        cipher_temp = utils.xor(plain_binary_splitted[i], des(k, cipher_splitted[i]))
-        cipher_splitted.append(cipher_temp)
+        if mode == 'decrypt':
+            temp = plain_binary_splitted[i]
+        elif mode == 'encrypt':
+            temp = cipher_binary_splitted[i]
+
+        des_k = des(k, temp)
+        cipher_binary_temp = utils.xor(plain_binary_splitted[i + 1],des_k)
+        cipher_binary_splitted.append(cipher_binary_temp)
+    plain_binary_splitted.remove(iv_binary)
+    cipher_binary_splitted.remove(iv_binary)
+
 
     # cipher
-    cipher = generate_cipher(cipher_splitted)
-    with open('output.txt', 'wb') as f:
-        f.write(cipher)
+    cipher_binary = ''
+    cipher_hex = ''
+    for c in cipher_binary_splitted:
+        cipher_binary += c
+        cipher_hex += convert_cipher_temp_to_hex(c)
+    cipher = cipher_hex.decode('hex')
+    utils.debugLine()
+    utils.debug('cipher splitted', cipher_binary_splitted)
+    utils.forceDebug('cipher bin ', cipher_binary)
+    utils.forceDebug('cipher hex ', cipher_hex)
+    utils.forceDebug('cipher text', cipher)
+
 
 utils.enableDebug = False
 start()

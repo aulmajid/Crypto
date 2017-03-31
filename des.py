@@ -76,8 +76,8 @@ def generate_lr0(plain_temp_binary_splitted):
     return l, r
 
 
-def generate_cipher_temp(l16, r16):
-    cipher_temp_binary = permute(r16 + l16, tables.IP_INV)
+def generate_cipher_temp(cipher_temp_binary):
+    cipher_temp_binary = permute(cipher_temp_binary, tables.IP_INV)
     cipher_temp_binary_splitted = utils.string_to_array(cipher_temp_binary, 8)
     cipher_temp = ''
     for c in cipher_temp_binary_splitted:
@@ -122,9 +122,7 @@ def des(k, binary):
         utils.debug('R' + str(j + 1), r[j + 1], 8)
         utils.debug('L' + str(j + 1), l[j + 1], 8)
 
-    # cipher temp
-    cipher_temp = generate_cipher_temp(l[16], r[16])
-    return cipher_temp
+    return r[16] + l[16]
 
 
 def start():
@@ -132,6 +130,7 @@ def start():
     with open('input.txt', 'rb') as f:
         plain = f.read()
     plain_binary_splitted = generate_plain_binary_splitted(plain)
+    block = len(plain_binary_splitted)
 
     # key
     key = '12345678'
@@ -143,9 +142,12 @@ def start():
 
     # blocks loop
     cipher_splitted = []
-    for i in range(len(plain_binary_splitted)):
+    for i in range(block):
         # des
-        cipher_temp = des(k, plain_binary_splitted[i])
+        cipher_temp_binary = des(k, plain_binary_splitted[i])
+
+        # cipher temp
+        cipher_temp = generate_cipher_temp(cipher_temp_binary)
         cipher_splitted.append(cipher_temp)
 
     # cipher
@@ -153,5 +155,6 @@ def start():
     with open('output.txt', 'wb') as f:
         f.write(cipher)
 
-utils.enableDebug=False
+
+utils.enableDebug = True
 start()

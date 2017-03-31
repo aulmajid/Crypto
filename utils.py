@@ -65,3 +65,9 @@ def debugLine():
         return
     print ''
 
+def forceDebug(tag, content, length=None):
+    content = str(content)
+    if length is None:
+        print tag + ' : ' + content
+    else:
+        print tag + ' : ' + split_string(content, length)

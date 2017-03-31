@@ -50,6 +50,7 @@ def convert_iv_to_binary(iv):
     utils.forceDebug('iv binary', iv_binary, 7)
     return iv_binary
 
+
 def generate_cd(key_binary):
     cd0 = permute(key_binary, tables.PC1)
     c = [cd0[:len(tables.PC1) / 2]]
@@ -122,7 +123,6 @@ def des(k, binary):
 
 
 def start():
-
     # plain
     mode = raw_input('Mode (Encrypt / Decrypt) : ').lower()
     plain = raw_input('Enter input to ' + mode + ' : ')
@@ -154,11 +154,10 @@ def start():
             temp = cipher_binary_splitted[i]
 
         des_k = des(k, temp)
-        cipher_binary_temp = utils.xor(plain_binary_splitted[i + 1],des_k)
+        cipher_binary_temp = utils.xor(plain_binary_splitted[i + 1], des_k)
         cipher_binary_splitted.append(cipher_binary_temp)
     plain_binary_splitted.remove(iv_binary)
     cipher_binary_splitted.remove(iv_binary)
-
 
     # cipher
     cipher_binary = ''
@@ -168,8 +167,8 @@ def start():
         cipher_hex += convert_cipher_temp_to_hex(c)
     cipher = cipher_hex.decode('hex')
     utils.forceDebugLine()
-    utils.forceDebug('cipher bin ', cipher_binary,8)
-    utils.forceDebug('cipher hex ', cipher_hex,16)
+    utils.forceDebug('cipher bin ', cipher_binary, 8)
+    utils.forceDebug('cipher hex ', cipher_hex, 16)
     utils.forceDebug('cipher text', cipher)
 
 

@@ -1,5 +1,6 @@
 enableDebug = True
 
+
 def string_to_array(text, length):
     texts = []
     for i in range(0, len(text), length):
@@ -60,10 +61,12 @@ def debug(tag, content, length=None):
     else:
         print tag + ' : ' + split_string(content, length)
 
+
 def debugLine():
     if not enableDebug:
         return
     print ''
+
 
 def forceDebug(tag, content, length=None):
     content = str(content)
@@ -71,6 +74,7 @@ def forceDebug(tag, content, length=None):
         print tag + ' : ' + content
     else:
         print tag + ' : ' + split_string(content, length)
+
 
 def forceDebugLine():
     print ''

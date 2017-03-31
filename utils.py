@@ -71,3 +71,6 @@ def forceDebug(tag, content, length=None):
         print tag + ' : ' + content
     else:
         print tag + ' : ' + split_string(content, length)
+
+def forceDebugLine():
+    print ''

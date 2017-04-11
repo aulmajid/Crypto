@@ -1,4 +1,4 @@
-enableDebug = True
+enableDebug = False
 
 
 def string_to_array(text, length):

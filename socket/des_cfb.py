@@ -28,26 +28,26 @@ def convert_plain_to_binary_splitted(plain):
     plain_binary_splitted = []
     for p in plain_splitted:
         plain_binary_splitted.append(utils.string_to_binary(p))
-    utils.forceDebugLine()
-    utils.forceDebug('plain text           ', plain)
-    utils.forceDebug('plain splitted       ', plain_splitted)
-    utils.forceDebug('plain splitted binary', plain_binary_splitted)
+    utils.debugLine()
+    utils.debug('plain text           ', plain)
+    utils.debug('plain splitted       ', plain_splitted)
+    utils.debug('plain splitted binary', plain_binary_splitted)
     return plain_binary_splitted
 
 
 def convert_key_to_binary(key):
     key_binary = utils.string_to_binary(key)
-    utils.forceDebugLine()
-    utils.forceDebug('key text  ', key)
-    utils.forceDebug('key binary', key_binary, 7)
+    utils.debugLine()
+    utils.debug('key text  ', key)
+    utils.debug('key binary', key_binary, 7)
     return key_binary
 
 
 def convert_iv_to_binary(iv):
     iv_binary = utils.string_to_binary(iv)
-    utils.forceDebugLine()
-    utils.forceDebug('iv text  ', iv)
-    utils.forceDebug('iv binary', iv_binary, 7)
+    utils.debugLine()
+    utils.debug('iv text  ', iv)
+    utils.debug('iv binary', iv_binary, 7)
     return iv_binary
 
 
@@ -122,12 +122,12 @@ def des(k, binary):
     return permute(r[16] + l[16], tables.IP_INV)
 
 
-def start():
+def start(mode, plain):
     # plain
-    mode = raw_input('Mode (Encrypt / Decrypt) : ').lower()
-    #plain = raw_input('Enter input to ' + mode + ' : ')
-    plain = 'Beberapa kota yang sudah mulai membangun Smart City diantaranya adalah Surabaya, Jakarta, Bandung dan Tangerang'
-    #plain = 'a24800279f63f313faed7865e3ac1a6267872c2012b35803a4cc2d173b94cda6b3c82c4a83a2cce60914913318b1a5cec318a7ded66805eb484cb98275364939a3a0427515f23b3a7416049dd0b8ee8ab72911828dbfdb2fe78223fb1e67a4d5de0bf510bd98507124ab7c3d2d6c7790'
+    # mode = raw_input('Mode (Encrypt / Decrypt) : ').lower()
+    # plain = raw_input('Enter input to ' + mode + ' : ')
+    # plain = 'Beberapa kota yang sudah mulai membangun Smart City diantaranya adalah Surabaya, Jakarta, Bandung dan Tangerang'
+    # plain = 'a24800279f63f313faed7865e3ac1a6267872c2012b35803a4cc2d173b94cda6b3c82c4a83a2cce60914913318b1a5cec318a7ded66805eb484cb98275364939a3a0427515f23b3a7416049dd0b8ee8ab72911828dbfdb2fe78223fb1e67a4d5de0bf510bd98507124ab7c3d2d6c7790'
 
     if mode == 'decrypt':
         plain = plain.decode('hex')
@@ -169,11 +169,20 @@ def start():
         cipher_binary += c
         cipher_hex += convert_cipher_temp_to_hex(c)
     cipher = cipher_hex.decode('hex')
-    utils.forceDebugLine()
-    utils.forceDebug('cipher bin ', cipher_binary, 8)
-    utils.forceDebug('cipher hex ', cipher_hex)
-    utils.forceDebug('cipher text', cipher)
+    utils.debugLine()
+    utils.debug('cipher bin ', cipher_binary, 8)
+    utils.debug('cipher hex ', cipher_hex)
+    utils.debug('cipher text', cipher)
+
+    if mode == 'encrypt':
+        return cipher_hex
+    else:
+        return cipher
 
 
-utils.enableDebug = False
-start()
+def encrypt(text):
+    return start('encrypt', text)
+
+
+def decrypt(hex):
+    return start('decrypt', hex)

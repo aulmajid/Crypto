@@ -25,7 +25,16 @@ Langkah-langkah:
 8.	Server menampilkan pesan
 
 # Diffie-Hellman
-Diffie-Hellman key exchange adalah metode dimana subyek menukar kunci rahasia   melalui   media   yang   tidak   aman   tanpa   mengekspos   kunci dan tanpa kunci tambahan. Metode ini memiliki dua parameter yaitu p (bilangan prima) dan g ( disebut generator, berupa integer dan lebih kecil dari p). Kedua parameter tersebut publik dan dapat digunakan  oleh  semua  pengguna  sistem.
+Diffie-Hellman key exchange adalah metode dimana subyek menukar kunci rahasia   melalui   media   yang   tidak   aman   tanpa   mengekspos   kunci dan tanpa kunci tambahan. Metode ini memiliki dua parameter yaitu q (bilangan prima) dan a ( disebut generator, berupa integer dan lebih kecil dari q dan merupakan primitive root dari q). Kedua parameter tersebut publik dan dapat digunakan  oleh  semua  pengguna  sistem. Selain itu terdapat dua parameter lagi yang masing-masing hanya dimiliki oleh pengirim dan penerima saja.
+
+Langkah-langkah:
+1. Pihak pengirim dan penerima bersama-sama menyepakati nilai q dan a.
+2. Kedua pihak memilih sebuah nilai untuk disimpan sendiri (xa dan xb) yang bernilai lebih kecil dari q.
+3. Pengirim menghitung nilai ya dan penerima menghitung nilai yb.
+4. Pengirim mengirim nilai ya dan penerima mengirim nilai yb.
+5. Pengirim menghitung nilai key dari yb dan ka, penerima menghitung nilai key dari yb dan ka.
+6. Didapatkan nilai key yang sama.
+
 
 
 Referensi:

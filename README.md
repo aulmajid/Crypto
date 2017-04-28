@@ -24,9 +24,13 @@ Langkah-langkah:
 7.	Server menerima pesan dari client, lalu mendekrip
 8.	Server menampilkan pesan
 
+# Diffie-Hellman
+Diffie-Hellman key exchange adalah metode dimana subyek menukar kunci rahasia   melalui   media   yang   tidak   aman   tanpa   mengekspos   kunci dan tanpa kunci tambahan. Metode ini memiliki dua parameter yaitu p (bilangan prima) dan g ( disebut generator, berupa integer dan lebih kecil dari p). Kedua parameter tersebut publik dan dapat digunakan  oleh  semua  pengguna  sistem.
+
 
 Referensi:
 http://octarapribadi.blogspot.co.id/2012/10/contoh-enkripsi-dengan-algoritma-des.html
 http://ilmu-kriptografi.blogspot.co.id/2009/05/algoritma-des-data-encryption-standart.html
+http://maisaro-rambe.blogspot.co.id/2015/06/penjelasan-tentang-metode-rsa-diffie.html
 Tugas mata kuliah progjar tentang socket dan select
 

@@ -1,5 +1,4 @@
 import socket
-from fractions import gcd
 
 import utils
 
@@ -7,20 +6,21 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 12346)
 client_socket.connect(server_address)
 
-p = 12131072439211271897323671531612440428472427633701410925634549312301964373042085619324197365322416866541017057361365214171711713797974299334871062829803541
-q = 12027524255478748885956220793734512128733387803682075433653899983955179850988797899869146900809131611153346817050832096022160146366346391812470987105415233
-n = p * q
-phi = (p - 1) * (q - 1) / gcd(p - 1, q - 1)
+client_socket.send('init')
 
-e = 65537
-if (e > 1 and e < phi and gcd(e, phi) == 1):
-    print 'e memenuhi syarat'
-else:
-    print 'e tidak memenuhi syarat'
+n = utils.int_recv(client_socket)
+e = utils.int_recv(client_socket)
+print 'n : ' + str(n)
+print 'e : ' + str(e)
 
-d = 89489425009274444368228545921773093919669586065884257445497854456487674839629818390934941973262879616797970608917283679875499331574161113854088813275488110588247193077582527278437906504015680623423550067240042466665654232383502922215493623289472138866445818789127946123407807725702626644091036502372545139713
+plain = 'attack on titan'
+print 'plain : ' + plain
 
-utils.int_send(client_socket, n)
-utils.int_send(client_socket, e)
+plain_ascii = utils.string_to_ascii(plain)
+plain_ascii = utils.string_to_ascii(plain)
+print 'plain ascii : ' + str(plain_ascii)
 
-plain = 'attack at dawn'
+cipher_ascii = pow(plain_ascii, e, n)
+print 'cipher ascii : ' + str(cipher_ascii)
+
+utils.int_send(client_socket, cipher_ascii)

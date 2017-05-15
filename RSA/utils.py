@@ -12,8 +12,22 @@ def ascii_to_string(ascii):
     ascii = ascii.zfill(length)
 
     string = ''
-    for i in range(0,length,3):
-        string+= unichr(int(ascii[i:i+3]))
+    for i in range(0, length, 3):
+        string += unichr(int(ascii[i:i + 3]))
+    return string
+
+
+def string_to_ascii_array(string):
+    ascii = []
+    for x in string:
+        ascii.append(ord(x))
+    return ascii
+
+
+def ascii_array_to_string(ascii_array):
+    string = ''
+    for ascii in ascii_array:
+        string += unichr(int(ascii))
     return string
 
 
@@ -23,8 +37,17 @@ def string_to_array(text, length):
         texts.append(text[i:i + length])
     return texts
 
+
+def array_to_string(array):
+    string = ''
+    for x in array:
+        string += str(x)
+    return string
+
+
 def int_send(socket, value):
     socket.send(str(value) + '.')
+
 
 def int_recv(socket):
     buf = ""

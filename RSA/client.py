@@ -1,5 +1,6 @@
 import socket
 
+import rsa
 import utils
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,11 +17,12 @@ print 'e : ' + str(e)
 plain = 'attack on titan'
 print 'plain : ' + plain
 
-plain_ascii = utils.string_to_ascii(plain)
-plain_ascii = utils.string_to_ascii(plain)
-print 'plain ascii : ' + str(plain_ascii)
+plain_ascii = utils.string_to_ascii_array(plain)
+print 'plain ascii : ' + utils.array_to_string(plain_ascii)
+utils.int_send(client_socket, len(plain_ascii))
 
-cipher_ascii = pow(plain_ascii, e, n)
-print 'cipher ascii : ' + str(cipher_ascii)
+cipher_ascii_array, cipher_ascii = rsa.encrypt(plain_ascii, e, n)
+print 'cipher ascii : ' + cipher_ascii
 
-utils.int_send(client_socket, cipher_ascii)
+for ascii in cipher_ascii_array:
+    utils.int_send(client_socket, ascii)

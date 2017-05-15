@@ -1,20 +1,47 @@
+import numpy as np
+import fractions as fr
 import utils
 
-p = 12131072439211271897323671531612440428472427633701410925634549312301964373042085619324197365322416866541017057361365214171711713797974299334871062829803541
-q = 12027524255478748885956220793734512128733387803682075433653899983955179850988797899869146900809131611153346817050832096022160146366346391812470987105415233
 
-n = p * q
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
 
-phi = (p - 1) * (q - 1)
-e = 65537
 
-d = 89489425009274444368228545921773093919669586065884257445497854456487674839629818390934941973262879616797970608917283679875499331574161113854088813275488110588247193077582527278437906504015680623423550067240042466665654232383502922215493623289472138866445818789127946123407807725702626644091036502372545139713
-plain = 'attack at dawn'
-m = utils.string_to_ascii(plain)
-print 'plain_ascii ' + str(m)
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
 
-c = pow(m,e,n)
-cipher = utils.ascii_to_string(c)
-print 'cipher_ascii ' + str(c)
 
-print 'plain_ascii ' + utils.ascii_to_string(str(pow(c, d, n)))
+def generate_value(p, q):
+    n = p * q
+    m = (p - 1) * (q - 1)
+
+    while True:
+        e = np.random.randint(1, m)
+        if fr.gcd(e, m) == 1:
+            break
+
+    d = modinv(e, m)
+
+    return n, m, e, d
+
+
+def encrypt(plain_ascii_array, e, n):
+    cipher_ascii_array = []
+    for ascii in plain_ascii_array:
+        cipher_ascii_array.append(pow(ascii, e, n))
+    return cipher_ascii_array, utils.array_to_string(cipher_ascii_array)
+
+
+def decrypt(cipher_ascii_array, d, n):
+    plain_ascii_array = []
+    for ascii in cipher_ascii_array:
+        plain_ascii_array.append(pow(ascii, d, n))
+    return plain_ascii_array, utils.array_to_string(plain_ascii_array)
